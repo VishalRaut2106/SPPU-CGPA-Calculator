@@ -1,84 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPPU CGPA Calculator</title>
-    <link rel="icon" href="./image/logo.png" type="image/png">
+    <title>GradeQuest | SPPU Analyzer</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
-
 <body>
-    <div class="container">
-        <h1>SPPU CGPA Calculator</h1>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">GradeQuest</div>
+            <nav id="mainNav">
+                <div class="nav-item active" data-target="calculator-page">Calculator</div>
+                <div class="nav-item" data-target="history-page">History</div>
+                <div class="nav-item" data-target="guidelines-page">SPPU Guidelines</div>
+            </nav>
+        </aside>
 
-        <div class="input-section">
-            <div class="form-group">
-                <label for="examPattern">Exam Pattern:</label>
-                <select id="examPattern" required>
-                    <option value="">Select Pattern</option>
-                    <option value="2019">2019 Pattern</option>
-                    <option value="2024">2024 Pattern</option>
-                </select>
-            </div>
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>SPPU Academic Performance Tracker</h1>
+                <div class="user-profile">Engineering</div>
+            </header>
 
-            <div class="form-group">
-                <label for="course">Course/Branch:</label>
-                <select id="course" required>
-                    <option value="">Select Course</option>
-                    <option value="engineering">Engineering</option>
-                    <option value="bcs">BCS</option>
-                </select>
-            </div>
+            <div id="calculator-page" class="page-section">
+                <div class="dashboard-grid">
+                    <section class="card config-section">
+                        <h3>Academic Configuration</h3>
+                        <div class="input-grid">
+                            <div class="group">
+                                <label>Examination Pattern</label>
+                                <select id="examPattern">
+                                    <option value="2019">2019 Credit Pattern</option>
+                                    <option value="2024">2024 NEP Pattern</option>
+                                </select>
+                            </div>
+                            <div class="group">
+                                <label>Branch / Stream</label>
+                                <select id="course">
+                                    <option value="engineering">Bachelor of Engineering (B.E)</option>
+                                    <option value="bcs">Bachelor of Computer Science (BCS)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </section>
 
-            <div class="form-group">
-                <label for="semester">Semester:</label>
-                <select id="semester" required>
-                    <option value="">Select Semester</option>
-                    <option value="1">Semester 1</option>
-                    <option value="2">Semester 2</option>
-                    <option value="3">Semester 3</option>
-                    <option value="4">Semester 4</option>
-                    <option value="5">Semester 5</option>
-                    <option value="6">Semester 6</option>
-                    <option value="7">Semester 7</option>
-                    <option value="8">Semester 8</option>
-                </select>
-            </div>
-        </div>
+                    <section class="card calculator-section" id="printableArea">
+                        <div class="card-header">
+                            <h2>Subject Matrix</h2>
+                            <div class="actions">
+                                <button id="addSubject" class="btn-icon" title="Add Subject">+</button>
+                                <button id="clearAll" class="btn-danger-outline">Clear</button>
+                            </div>
+                        </div>
+                        <div id="subjectsList" class="scroll-area"></div>
+                        <div class="calc-footer">
+                            <button id="calculateCGPA" class="btn-primary">Generate Analysis</button>
+                            <button id="downloadReport" class="btn-secondary">Download PDF</button>
+                        </div>
+                    </section>
 
-        <div id="subjectsContainer" class="subjects-container">
-            <h2>Subject Details</h2>
-            <div id="subjectsList"></div>
-            <button id="addSubject" class="btn">Add Subject</button>
-            <button id="calculateCGPA" class="btn">Calculate CGPA</button>
-            <div class="result-box">
-                <div class="result-item">
-                    <span>Your CGPA:</span>
-                    <span id="cgpaResult">--</span>
+                    <section class="card analytics-section">
+                        <h3>Live Insights</h3>
+                        <div class="stats-container">
+                            <div class="stat-item">
+                                <span class="label">Calculated CGPA</span>
+                                <div id="cgpaResult" class="value">--</div>
+                            </div>
+                            <div class="stat-item">
+                                <span class="label">Equivalent %</span>
+                                <div id="convertedPercentage" class="value">--</div>
+                            </div>
+                            <div class="stat-item">
+                                <span class="label">Class Grade</span>
+                                <div id="classAward" class="value">--</div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
-        </div>
 
-        <div class="converter-section">
-            <h2>CGPA to Percentage Converter</h2>
-            <div class="converter-box">
-                <div class="form-group">
-                    <label for="cgpaInput">Enter CGPA:</label>
-                    <input type="number" id="cgpaInput" min="0" max="10" step="0.01" placeholder="Enter CGPA (0-10)">
-                </div>
-                <button id="convertCGPA" class="btn">Convert to Percentage</button>
-                <div class="result-box">
-                    <div class="result-item">
-                        <span>Your Percentage:</span>
-                        <span id="convertedPercentage">--</span>
-                    </div>
+            <div id="history-page" class="page-section card" style="display:none;">
+                <h2>Calculation History</h2>
+                <div id="historyLogs">
+                    <p class="text-muted">No previous calculations found.</p>
                 </div>
             </div>
-        </div>
+
+            <div id="guidelines-page" class="page-section card" style="display:none;">
+                <h2>SPPU Official Guidelines</h2>
+                <div class="guidelines-content">
+                    <h4>2019 Credit Pattern</h4>
+                    <p>Passing requires a minimum of 40% in both In-sem and End-sem combined.</p>
+                    <hr>
+                    <h4>2024 NEP Pattern</h4>
+                    <p>New vertical credits system applied for engineering streams.</p>
+                </div>
+            </div>
+        </main>
     </div>
     <script src="main.js"></script>
 </body>
-
 </html>
